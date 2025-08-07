@@ -31,26 +31,63 @@ class ShopGridItem extends StatelessWidget {
             Expanded(
               flex: 3,
               child: Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage(shop.imageUrl),
-                    fit: BoxFit.cover,
-                    onError: (exception, stackTrace) {
-                      // Handle image load error
-                    },
-                  ),
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Colors.transparent,
-                        Colors.black.withOpacity(0.3),
-                      ],
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    Image.network(
+                      shop.imageUrl,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Container(
+                          color: Colors.grey[800],
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.local_cafe,
+                                size: 32,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                'Coffee Shop',
+                                style: TextStyle(
+                                  color: Colors.white60,
+                                  fontSize: 10,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                      loadingBuilder: (context, child, loadingProgress) {
+                        if (loadingProgress == null) {
+                          return child;
+                        }
+                        return Container(
+                          color: Colors.grey[800],
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              color: Theme.of(context).colorScheme.primary,
+                              strokeWidth: 2,
+                            ),
+                          ),
+                        );
+                      },
                     ),
-                  ),
+                    Container(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Colors.transparent,
+                            Colors.black.withOpacity(0.3),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
